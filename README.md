@@ -15,10 +15,12 @@ Nhằm khắc phục những giới hạn của các phương pháp truy xuất 
 * **Nhánh Truy xuất Dày (Dense/Semantic Retrieval) - Bi-Encoder (`multilingual-e5-base`):** Bằng cách ánh xạ văn bản vào không gian vector đa chiều (Embeddings), mô hình thực hiện đánh giá độ tương đồng dựa trên ngữ cảnh (Semantic Matching). Đặc tính này giúp hệ thống khắc phục triệt để điểm yếu của BM25 trong việc xử lý hiện tượng từ đồng nghĩa (Synonymy) và đa nghĩa (Polysemy). Mặc dù vậy, do cấu trúc biểu diễn vector thường kém nhạy bén với các định danh ID hoặc từ khóa rời rạc, việc kết hợp Dense Model và BM25 tạo ra một cơ chế bù trừ hoàn hảo, đảm bảo không bỏ sót bất kỳ thông tin trọng yếu nào.
 
 
-### 3. Dung hợp điểm số (RRF)
-Việc kết hợp kết quả từ hai không gian biểu diễn (Sparse và Dense) đặt ra thách thức về sự bất đồng nhất trong phân phối hàm điểm (Score Distribution). Hệ thống áp dụng thuật toán **Reciprocal Rank Fusion (RRF)** để giải quyết vấn đề này:
-* Thuật toán RRF loại bỏ sự phụ thuộc vào điểm số nguyên bản của từng mô hình, thay vào đó tính toán trọng số dung hợp dựa trên nghịch đảo thứ hạng (Reciprocal Rank).
-* Các tài liệu đạt thứ hạng cao ở cả hai nhánh truy xuất sẽ được gia tăng trọng số tích lũy. Cơ chế này hoạt động như một bộ lọc nhiễu (Noise Filter), đảm bảo tính ổn định và tính đa dạng cho tập ứng viên Top-$K$ (Top-K Candidates) được trích xuất.
+### 3. Dung hợp Điểm số và Lọc Ứng viên (Rank Aggregation - RRF)
+Việc kết hợp kết quả từ hai không gian biểu diễn (Sparse và Dense) đặt ra thách thức lớn về sự bất đồng nhất trong phân phối hàm điểm (Score Distribution). Để giải quyết triệt để bài toán này, hệ thống triển khai thuật toán **Reciprocal Rank Fusion (RRF)** trên tập ứng viên sơ cấp:
+
+* **Trích xuất và Hợp nhất Cục bộ:** Đối với mỗi truy vấn, hệ thống tiến hành truy xuất độc lập Top 50 tài liệu dẫn đầu từ nhánh BM25 và Top 50 tài liệu từ nhánh Dense Model. Thuật toán RRF sau đó được kích hoạt để dung hợp hai danh sách rời rạc này thành một không gian ứng viên thống nhất.
+* **Định lượng qua Nghịch đảo Thứ hạng:** Thay vì sử dụng điểm số nguyên bản vốn không cùng hệ quy chiếu, RRF tính toán điểm số mới cho mỗi tài liệu dựa trên nghịch đảo vị trí xếp hạng (Reciprocal Rank) của nó trong từng danh sách. Cơ chế này giúp triệt tiêu hoàn toàn sự chênh lệch về thang điểm (Scale Bias) giữa các mô hình.
+* **Khuếch đại Tín hiệu Đồng thuận (Consensus Amplification):** Những tài liệu xuất hiện ở thứ hạng cao trong cả hai danh sách Top 50 sẽ được cộng dồn trọng số và đẩy lên vị trí dẫn đầu. Kết thúc quá trình dung hợp, thuật toán gạn lọc và giữ lại đúng 50 ứng viên (Top-50 Candidates) ưu tú nhất. Tập ứng viên này mang tính đa dạng cao — bao hàm cả đặc tính đối khớp từ vựng lẫn ngữ nghĩa — sẵn sàng chuyển giao cho giai đoạn tái xếp hạng chuyên sâu.
 
 ### 4. Tái xếp hạng Giai đoạn hai (Second-Stage Re-ranking)
 Tập ứng viên từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá độ liên quan chuyên sâu bằng cấu trúc **Cross-Encoder**:
