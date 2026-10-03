@@ -9,7 +9,7 @@ Dữ liệu văn bản thô thường tồn tại nhiễu và phân mảnh thôn
 ### 2. Truy xuất bằng BM25 & Dense
 Nhằm khắc phục những giới hạn của các phương pháp truy xuất đơn lẻ, hệ thống vận hành song song hai nhánh trích xuất độc lập nhằm cực đại hóa độ phủ (Recall) trên toàn bộ tập dữ liệu (Corpus):
 
-* ** BM25 (Kế thừa TF-IDF): Thuật toán này hoạt động dựa trên cơ chế so khớp từ khóa chính xác (Lexical Matching). Nó cực kỳ mạnh khi bạn cần tìm kiếm các mã số đặc thù, tên riêng hiếm gặp, hoặc các thuật ngữ chuyên ngành không thể thay thế. Tuy nhiên, nó sẽ "mù tịt" nếu câu hỏi và tài liệu dùng từ đồng nghĩa (ví dụ: hỏi "xe cộ" nhưng tài liệu ghi "phương tiện giao thông").
+* BM25 (Kế thừa TF-IDF): Thuật toán này hoạt động dựa trên cơ chế so khớp từ khóa chính xác (Lexical Matching). Nó cực kỳ mạnh khi bạn cần tìm kiếm các mã số đặc thù, tên riêng hiếm gặp, hoặc các thuật ngữ chuyên ngành không thể thay thế. Tuy nhiên, nó sẽ "mù tịt" nếu câu hỏi và tài liệu dùng từ đồng nghĩa (ví dụ: hỏi "xe cộ" nhưng tài liệu ghi "phương tiện giao thông").
 * **Nhánh Truy xuất Dày (Dense/Semantic Retrieval) - Mô hình Bi-Encoder:**
   * Ứng dụng kiến trúc mã hóa kép (như `multilingual-e5`) để ánh xạ các truy vấn (Queries) và tài liệu (Passages) vào cùng một không gian nhúng liên tục (Continuous Embedding Space). 
   * Độ tương đồng được đo lường thông qua khoảng cách Cosine, cho phép hệ thống đánh giá tính liên kết về mặt ngữ nghĩa tiềm ẩn (Latent Semantic Relatedness), từ đó xử lý triệt để các hiện tượng đồng nghĩa (Synonymy) và đa nghĩa (Polysemy).
