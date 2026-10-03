@@ -1,4 +1,4 @@
-## 🎯 Tổng quan Bài toán (Problem Statement)
+## NLP - Passage Retrieval
 
 ### Tổng quan
 Cho một **kho 20.000 đoạn văn** lấy từ Wikipedia tiếng Việt và một **câu hỏi**, hệ thống phải tìm ra đoạn văn chứa câu trả lời[cite: 22]. Đây là bước truy xuất (retrieval) của một hệ thống hỏi đáp: thí sinh không cần trích câu trả lời, chỉ cần xếp đúng đoạn văn lên đầu danh sách[cite: 22].
@@ -29,7 +29,7 @@ Mỗi câu hỏi có **đúng một đoạn được tính là đúng**: đó l�
 QueryScore = 1 / hạng của đoạn đúng    (nếu đoạn đúng nằm ở hạng 1 đến 10)
 QueryScore = 0                         (nếu đoạn đúng không nằm trong 10 đoạn)
 ```
-
+### Cấu trúc thư mục dữ liệu
 public/
 |-- corpus.csv               (20.000 đoạn: pid, title, text)
 |-- train.csv                (3.995 cặp câu hỏi và đoạn đúng)
