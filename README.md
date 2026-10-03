@@ -1,4 +1,4 @@
-# Kiến Trúc hệ thống
+# Kiến trúc hệ thống
 
 Dự án này triển khai một chu trình truy xuất thông tin hai pha (Two-Stage Retrieval Pipeline), kết hợp phương pháp đối khớp từ vựng (Lexical Matching) và đối khớp ngữ nghĩa (Semantic Matching). Kiến trúc được thiết kế nhằm tối ưu hóa hiệu suất cho các tác vụ Xử lý Ngôn ngữ Tự nhiên (NLP) như Hỏi đáp tự động (Question Answering) và Tạo văn bản tăng cường truy xuất (Retrieval-Augmented Generation - RAG), với mục tiêu cực đại hóa cả độ phủ (Recall) và độ chuẩn xác (Precision).
 
