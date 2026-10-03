@@ -27,6 +27,6 @@ Hệ thống triển khai thuật toán **Reciprocal Rank Fusion (RRF)** trên t
 
 ### 4. Tái xếp hạng (Re-ranking)
 Tập kết quả từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá bằng cấu trúc **Cross-Encoder**:
-* Khác biệt với cấu trúc Bi-Encoder (chỉ so sánh khoảng cách giữa hai vector độc lập), mô hình Cross-Encoder thực hiện nối ghép trực tiếp truy vấn và từng tài liệu ứng viên thành một chuỗi duy nhất trước khi đưa qua mạng nơ-ron sâu.
+* Khác biệt với cấu trúc Bi-Encoder (chỉ so sánh khoảng cách giữa hai vector độc lập), mô hình Cross-Encoder thực hiện nối ghép trực tiếp truy vấn và từng tài liệu thành một chuỗi duy nhất trước khi đưa qua mạng nơ-ron sâu.
 * Dựa trên cơ chế tự chú ý chéo ở cấp độ token, mọi thành phần trong truy vấn đều có khả năng tương tác trực tiếp với các thành phần trong tài liệu qua nhiều tầng ẩn (Hidden Layers). Cấu trúc này cho phép mô hình nắm bắt các quan hệ ngữ cảnh phức tạp và cung cấp điểm số liên quan.
-* Việc giới hạn phạm vi suy luận của Cross-Encoder chỉ trên tập Top-K ứng viên giúp tối ưu hóa khối lượng tính toán.
+* Việc giới hạn phạm vi suy luận của Cross-Encoder chỉ trên tập Top-K kết quả giúp tối ưu hóa khối lượng tính toán.
