@@ -15,7 +15,7 @@ Nhằm khắc phục những giới hạn của các phương pháp truy xuất 
 * **Nhánh Truy xuất Dày (Dense/Semantic Retrieval) - Bi-Encoder (`multilingual-e5-base`):** Bằng cách ánh xạ văn bản vào không gian vector đa chiều (Embeddings), mô hình thực hiện đánh giá độ tương đồng dựa trên ngữ cảnh (Semantic Matching). Đặc tính này giúp hệ thống khắc phục triệt để điểm yếu của BM25 trong việc xử lý hiện tượng từ đồng nghĩa (Synonymy) và đa nghĩa (Polysemy). Mặc dù vậy, do cấu trúc biểu diễn vector thường kém nhạy bén với các định danh ID hoặc từ khóa rời rạc, việc kết hợp Dense Model và BM25 tạo ra một cơ chế bù trừ hoàn hảo, đảm bảo không bỏ sót bất kỳ thông tin trọng yếu nào.
 
 
-### 3. Dung hợp Điểm số (Rank Aggregation - RRF)
+### 3. Dung hợp điểm số (RRF)
 Việc kết hợp kết quả từ hai không gian biểu diễn (Sparse và Dense) đặt ra thách thức về sự bất đồng nhất trong phân phối hàm điểm (Score Distribution). Hệ thống áp dụng thuật toán **Reciprocal Rank Fusion (RRF)** để giải quyết vấn đề này:
 * Thuật toán RRF loại bỏ sự phụ thuộc vào điểm số nguyên bản của từng mô hình, thay vào đó tính toán trọng số dung hợp dựa trên nghịch đảo thứ hạng (Reciprocal Rank).
 * Các tài liệu đạt thứ hạng cao ở cả hai nhánh truy xuất sẽ được gia tăng trọng số tích lũy. Cơ chế này hoạt động như một bộ lọc nhiễu (Noise Filter), đảm bảo tính ổn định và tính đa dạng cho tập ứng viên Top-$K$ (Top-K Candidates) được trích xuất.
