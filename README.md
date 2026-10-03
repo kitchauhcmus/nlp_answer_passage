@@ -1,6 +1,6 @@
 # Ý tưởng thực hiện
 
-**Tóm tắt ý tưởng:**: Tối ưu Recall với kiến trúc truy xuất lai (BM25 & Bi-Encoder), đa dạng hóa ứng viên bằng RRF, cực đại hóa Precision bằng Cross-Encoder 
+**Tóm tắt ý tưởng:** Tối ưu Recall với kiến trúc truy xuất lai (BM25 & Bi-Encoder), đa dạng hóa ứng viên bằng RRF, cực đại hóa Precision bằng Cross-Encoder 
 
 
 ## Luồng kiến trúc hệ thống
