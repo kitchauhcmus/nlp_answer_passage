@@ -25,8 +25,8 @@ Hệ thống triển khai thuật toán **Reciprocal Rank Fusion (RRF)** trên t
 * **Định lượng qua nghịch đảo thứ hạng:** Thay vì sử dụng điểm số nguyên bản vốn không cùng hệ quy chiếu, RRF tính toán điểm số mới cho mỗi tài liệu dựa trên nghịch đảo vị trí xếp hạng của nó trong từng danh sách. Cơ chế này giúp triệt tiêu hoàn toàn sự chênh lệch về thang điểm giữa các mô hình.
 * **Cộng thứ hạng:** Những tài liệu xuất hiện ở thứ hạng cao trong cả hai danh sách Top 50 sẽ được cộng dồn trọng số và đẩy lên vị trí dẫn đầu. Kết thúc quá trình dung hợp, thuật toán lọc và giữ lại đúng 50 ứng viên tốt nhất. 
 
-### 4. Tái xếp hạng Giai đoạn hai (Second-Stage Re-ranking)
-Tập ứng viên từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá độ liên quan chuyên sâu bằng cấu trúc **Cross-Encoder**:
-* Khác biệt với cấu trúc Bi-Encoder (chỉ so sánh khoảng cách giữa hai vector độc lập), mô hình Cross-Encoder thực hiện nối ghép trực tiếp truy vấn và từng tài liệu ứng viên thành một chuỗi duy nhất trước khi đưa qua mạng nơ-ron sâu (Transformer).
-* Dựa trên cơ chế tự chú ý chéo (Cross-Attention) ở cấp độ token, mọi thành phần trong truy vấn đều có khả năng tương tác trực tiếp với các thành phần trong tài liệu qua nhiều tầng ẩn (Hidden Layers). Cấu trúc này cho phép mô hình nắm bắt các quan hệ ngữ cảnh phức tạp và cung cấp điểm số liên quan (Relevance Score) với độ chuẩn xác tối đa.
-* Việc giới hạn phạm vi suy luận (Inference) của Cross-Encoder chỉ trên tập Top-$K$ ứng viên giúp tối ưu hóa khối lượng tính toán, tạo ra sự cân bằng thiết yếu giữa chi phí phần cứng (Computational Complexity) và độ chuẩn xác (Precision).
+### 4. Re-ranking
+Tập ứng viên từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá bằng cấu trúc **Cross-Encoder**:
+* Khác biệt với cấu trúc Bi-Encoder (chỉ so sánh khoảng cách giữa hai vector độc lập), mô hình Cross-Encoder thực hiện nối ghép trực tiếp truy vấn và từng tài liệu ứng viên thành một chuỗi duy nhất trước khi đưa qua mạng nơ-ron sâu.
+* Dựa trên cơ chế tự chú ý chéo ở cấp độ token, mọi thành phần trong truy vấn đều có khả năng tương tác trực tiếp với các thành phần trong tài liệu qua nhiều tầng ẩn (Hidden Layers). Cấu trúc này cho phép mô hình nắm bắt các quan hệ ngữ cảnh phức tạp và cung cấp điểm số liên quan.
+* Việc giới hạn phạm vi suy luận của Cross-Encoder chỉ trên tập Top-K ứng viên giúp tối ưu hóa khối lượng tính toán.
