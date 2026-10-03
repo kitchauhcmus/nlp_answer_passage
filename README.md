@@ -20,7 +20,15 @@ Ví dụ một câu hỏi và đoạn đúng của nó:
 Mỗi câu hỏi có **đúng một đoạn được tính là đúng**: đó là đoạn văn mà người đặt câu hỏi đã đọc khi viết câu hỏi. Hai đặc điểm của dữ liệu cần chú ý khi đọc đề:
 * Câu hỏi thường **diễn đạt khác** với đoạn văn. Trong ví dụ trên, câu hỏi viết "Miaoli" và hỏi "quốc gia nào", còn đoạn văn viết "Miêu Lật" và "Đài Loan".
 * Kho có chứa **các đoạn khác của cùng bài viết** với đoạn đúng. Những đoạn này có cùng chủ đề và cùng tên riêng với đoạn đúng, nhưng không được tính điểm.
+## Định dạng bài nộp
 
+Tệp CSV mã hoá UTF-8, có dòng tiêu đề, gồm đúng 1.508 dòng dữ liệu (mỗi `qid` của `test.csv` một dòng) với hai cột:
+
+```csv
+qid,passages
+Q00007,P00452 P19980 P03311 P07602 P00018 P14455 P02219 P09090 P01234 P16780
+Q00010,P00001 P00002 P00003 P00004 P00005 P00006 P00007 P00008 P00009 P00010
+```
 ### Phương pháp đánh giá
 
 **Điểm của một câu hỏi**
