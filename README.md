@@ -18,15 +18,15 @@ Nhằm khắc phục những giới hạn của các phương pháp truy xuất 
 * **Nhánh Truy xuất Dày (Dense/Semantic Retrieval) - Bi-Encoder (`multilingual-e5-base`):** Bằng cách ánh xạ văn bản vào không gian vector đa chiều (Embeddings), mô hình thực hiện đánh giá độ tương đồng dựa trên ngữ cảnh (Semantic Matching). Đặc tính này giúp hệ thống khắc phục triệt để điểm yếu của BM25 trong việc xử lý hiện tượng từ đồng nghĩa (Synonymy) và đa nghĩa (Polysemy). Mặc dù vậy, do cấu trúc biểu diễn vector thường kém nhạy bén với các định danh ID hoặc từ khóa rời rạc, việc kết hợp Dense Model và BM25 tạo ra một cơ chế bù trừ hoàn hảo, đảm bảo không bỏ sót bất kỳ thông tin trọng yếu nào.
 
 
-### 3. Dung hợp điểm số và lọc Ứng viên (RRF)
-Hệ thống triển khai thuật toán **Reciprocal Rank Fusion (RRF)** trên tập ứng viên sơ cấp:
+### 3. Dung hợp điểm số và lọc kết quả (RRF)
+Hệ thống triển khai thuật toán **Reciprocal Rank Fusion (RRF)** trên tập kết quả sơ cấp:
 
-* **Trích xuất và hợp nhất:** Đối với mỗi truy vấn, hệ thống tiến hành truy xuất độc lập Top 50 tài liệu dẫn đầu từ nhánh BM25 và Top 50 tài liệu từ nhánh Dense Model. Thuật toán RRF sau đó được kích hoạt để dung hợp hai danh sách rời rạc này thành một không gian ứng viên thống nhất.
+* **Trích xuất và hợp nhất:** Đối với mỗi truy vấn, hệ thống tiến hành truy xuất độc lập Top 50 tài liệu dẫn đầu từ nhánh BM25 và Top 50 tài liệu từ nhánh Dense Model. Thuật toán RRF sau đó được kích hoạt để dung hợp hai danh sách rời rạc này thành một không gian kết quả thống nhất.
 * **Định lượng qua nghịch đảo thứ hạng:** Thay vì sử dụng điểm số nguyên bản vốn không cùng hệ quy chiếu, RRF tính toán điểm số mới cho mỗi tài liệu dựa trên nghịch đảo vị trí xếp hạng của nó trong từng danh sách. Cơ chế này giúp triệt tiêu hoàn toàn sự chênh lệch về thang điểm giữa các mô hình.
-* **Cộng thứ hạng:** Những tài liệu xuất hiện ở thứ hạng cao trong cả hai danh sách Top 50 sẽ được cộng dồn trọng số và đẩy lên vị trí dẫn đầu. Kết thúc quá trình dung hợp, thuật toán lọc và giữ lại đúng 50 ứng viên tốt nhất. 
+* **Cộng hưởng thứ hạng:** Những tài liệu xuất hiện ở thứ hạng cao trong cả hai danh sách Top 50 sẽ được cộng dồn trọng số và đẩy lên vị trí dẫn đầu. Kết thúc quá trình dung hợp, thuật toán lọc và giữ lại đúng 50 kết quả tốt nhất. 
 
-### 4. Re-ranking
-Tập ứng viên từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá bằng cấu trúc **Cross-Encoder**:
+### 4. Tái xếp hạng (Re-ranking)
+Tập kết quả từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá bằng cấu trúc **Cross-Encoder**:
 * Khác biệt với cấu trúc Bi-Encoder (chỉ so sánh khoảng cách giữa hai vector độc lập), mô hình Cross-Encoder thực hiện nối ghép trực tiếp truy vấn và từng tài liệu ứng viên thành một chuỗi duy nhất trước khi đưa qua mạng nơ-ron sâu.
 * Dựa trên cơ chế tự chú ý chéo ở cấp độ token, mọi thành phần trong truy vấn đều có khả năng tương tác trực tiếp với các thành phần trong tài liệu qua nhiều tầng ẩn (Hidden Layers). Cấu trúc này cho phép mô hình nắm bắt các quan hệ ngữ cảnh phức tạp và cung cấp điểm số liên quan.
 * Việc giới hạn phạm vi suy luận của Cross-Encoder chỉ trên tập Top-K ứng viên giúp tối ưu hóa khối lượng tính toán.
