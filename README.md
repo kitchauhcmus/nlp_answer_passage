@@ -7,10 +7,10 @@
 
 ### 1. Tiền xử lý và tích hợp ngữ cảnh
 Dữ liệu văn bản thô thường tồn tại nhiễu và phân mảnh thông tin. Giai đoạn tiền xử lý tiến hành chuẩn hóa và tích hợp không gian ngữ cảnh:
-* **Tích hợp Tiêu đề - Nội dung (Title-Text Concatenation):** Tiêu đề tài liệu thường bao hàm các thông tin cô đọng và có giá trị phân loại cao. Việc hợp nhất tiêu đề vào nội dung văn bản giúp gia tăng mật độ đặc trưng và làm phong phú không gian biểu diễn, qua đó nâng cao chất lượng đầu vào cho các mô hình mã hóa ở giai đoạn sau.
+* **Tích hợp Tiêu đề - Nội dung:** Tiêu đề tài liệu thường bao hàm các thông tin cô đọng và có giá trị phân loại cao. Việc hợp nhất tiêu đề vào nội dung văn bản giúp gia tăng mật độ đặc trưng và làm phong phú không gian biểu diễn, qua đó nâng cao chất lượng đầu vào cho các mô hình mã hóa ở giai đoạn sau.
 * **Chuẩn hóa Định dạng Đầu vào (Input Formatting & Tokenization):** Hệ thống thiết lập các luồng xử lý định dạng chuyên biệt nhằm tối ưu hóa cho từng cấu trúc truy xuất:
-  * *Đối với luồng từ vựng (BM25):* Áp dụng biểu thức chính quy (Regular Expression) để loại bỏ nhiễu (dấu câu, ký tự đặc biệt), chuyển đổi toàn bộ về dạng chữ thường (Lower-casing) và trích xuất danh sách token (Tokens) thuần túy.
-  * *Đối với luồng ngữ nghĩa (Dense Model):* Bổ sung các tiền tố chỉ dẫn (Instructional Prefixes) như `"passage: "` và `"query: "` vào dữ liệu nhằm kích hoạt chuẩn xác không gian nhúng của kiến trúc mạng E5.
+  * *Đối với luồng từ vựng (BM25):* Áp dụng biểu thức chính quy để loại bỏ nhiễu (dấu câu, ký tự đặc biệt), chuyển đổi toàn bộ về dạng chữ thường và trích xuất danh sách token thuần túy.
+  * *Đối với luồng ngữ nghĩa (Dense Model):* Bổ sung các tiền tố chỉ dẫn như `"passage: "` và `"query: "` vào dữ liệu nhằm kích hoạt chuẩn xác không gian nhúng của kiến trúc mạng E5.
 ### 2. Truy xuất bằng BM25 & Dense
 Nhằm khắc phục những giới hạn của các phương pháp truy xuất đơn lẻ, hệ thống vận hành song song hai nhánh trích xuất độc lập nhằm cực đại hóa độ phủ (Recall) trên toàn bộ tập dữ liệu (Corpus):
 
