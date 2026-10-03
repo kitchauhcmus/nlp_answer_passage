@@ -29,6 +29,10 @@ Mỗi câu hỏi có **đúng một đoạn được tính là đúng**: đó l�
 QueryScore = 1 / hạng của đoạn đúng    (nếu đoạn đúng nằm ở hạng 1 đến 10)
 QueryScore = 0                         (nếu đoạn đúng không nằm trong 10 đoạn)
 ```
+**Điểm của bài nộp**
+Điểm của bài nộp là trung bình QueryScore trên mọi câu hỏi của tập test, tức MRR@10:
+LeaderboardScore = (1 / N) x Σ QueryScore
+
 ### Cấu trúc thư mục dữ liệu
 
 public/
