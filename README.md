@@ -1,35 +1,35 @@
-# 🚀 Kiến trúc Truy xuất Thông tin Lai (Robust Hybrid Retrieval Pipeline)
+# Kiến Trúc Hệ Thống Truy Xuất Thông Tin Lai (Robust Hybrid Retrieval Framework)
 
-Dự án này đề xuất và triển khai một đường ống truy xuất thông tin hai giai đoạn (Two-Stage Retrieval Pipeline) kết hợp phương pháp đối sánh từ vựng (Lexical Matching) và đối sánh ngữ nghĩa (Semantic Matching). Kiến trúc được thiết kế tối ưu cho các bài toán NLP như Hỏi đáp tự động (QA) và Tạo văn bản tăng cường truy xuất (RAG), nhằm tối đa hóa cả độ bao phủ (Recall) lẫn độ chính xác (Precision).
+Dự án này triển khai một chu trình truy xuất thông tin hai pha (Two-Stage Retrieval Pipeline), kết hợp phương pháp đối khớp từ vựng (Lexical Matching) và đối khớp ngữ nghĩa (Semantic Matching). Kiến trúc được thiết kế nhằm tối ưu hóa hiệu suất cho các tác vụ Xử lý Ngôn ngữ Tự nhiên (NLP) như Hỏi đáp tự động (Question Answering) và Tạo văn bản tăng cường truy xuất (Retrieval-Augmented Generation - RAG), với mục tiêu cực đại hóa cả độ phủ (Recall) và độ chuẩn xác (Precision).
 
-## 🧠 Luồng Kiến trúc Hệ thống (System Architecture Flow)
+## 🧠 Luồng Kiến Trúc Hệ Thống (System Architecture Flow)
 
-Đường ống dữ liệu được thiết kế tuyến tính, xử lý thông tin thông qua 4 giai đoạn cốt lõi:
+Chu trình dữ liệu được thiết kế tuyến tính, xử lý thông tin thông qua 4 giai đoạn cốt lõi:
 
-### 1. Tiền xử lý và Làm giàu ngữ cảnh (Context Enrichment)
-Dữ liệu thô hiếm khi đạt trạng thái tối ưu cho các bộ mã hóa (Encoders). Giai đoạn tiền xử lý thực hiện việc chuẩn hóa và hợp nhất không gian thông tin:
-* **Hợp nhất Tiêu đề - Nội dung (Title-Text Concatenation):** Tiêu đề tài liệu mang mật độ ngữ nghĩa rất cao. Việc nối trực tiếp tiêu đề vào trước nội dung văn bản giúp gia tăng trọng số của các thực thể bổ nghĩa, tối ưu hóa không gian biểu diễn đặc trưng (feature representation) trước khi đưa vào các mô hình tìm kiếm.
+### 1. Tiền xử lý và Tích hợp Ngữ cảnh (Context Enrichment)
+Dữ liệu văn bản thô thường tồn tại nhiễu và phân mảnh thông tin. Giai đoạn tiền xử lý tiến hành chuẩn hóa và tích hợp không gian ngữ cảnh:
+* **Tích hợp Tiêu đề - Nội dung (Title-Text Concatenation):** Tiêu đề tài liệu thường bao hàm các thông tin cô đọng và có giá trị phân loại cao. Việc hợp nhất tiêu đề vào nội dung văn bản giúp gia tăng mật độ đặc trưng (Feature Density) và làm phong phú không gian biểu diễn, qua đó nâng cao chất lượng đầu vào cho các mô hình mã hóa ở giai đoạn sau.
 
-### 2. Truy xuất Giai đoạn một (First-Stage Retrieval: Dual-Stream)
-Để vượt qua giới hạn của từng phương pháp truy xuất đơn lẻ, hệ thống vận hành song song hai luồng trinh sát độc lập nhằm tối đa hóa độ bao phủ (Recall) trên toàn bộ kho tài liệu (Corpus):
+### 2. Truy xuất Giai đoạn một (First-Stage Retrieval)
+Nhằm khắc phục những giới hạn của các phương pháp truy xuất đơn lẻ, hệ thống vận hành song song hai nhánh trích xuất độc lập nhằm cực đại hóa độ phủ (Recall) trên toàn bộ tập dữ liệu (Corpus):
 
-* **Luồng Truy xuất Từ vựng (Sparse/Lexical Retrieval) - Cốt lõi BM25:**
-  * Kế thừa và khắc phục những hạn chế của TF-IDF, thuật toán Okapi BM25 được triển khai để giải quyết bài toán đối sánh từ khóa chính xác (Exact Match). 
-  * Bằng cách áp dụng hàm chuẩn hóa độ dài tài liệu (Document Length Normalization) và đường cong bão hòa tần suất (Term Frequency Saturation), BM25 loại bỏ nhiễu từ các tài liệu lặp từ khóa quá mức, đóng vai trò sống còn trong việc truy xuất các danh từ riêng, mã định danh và thuật ngữ chuyên ngành (Out-of-Vocabulary terms).
-* **Luồng Truy xuất Ngữ nghĩa (Dense Retrieval) - Bi-Encoder (Multilingual-E5):**
-  * Sử dụng kiến trúc Bi-Encoder, mô hình chiếu (map) các truy vấn (query) và tài liệu (passage) vào một không gian vector đa chiều chung (Embedding Space). 
-  * Phương pháp này đo lường khoảng cách tương đồng (Cosine Similarity) dựa trên các đặc trưng tiềm ẩn (Latent Semantic Relationships), giúp hệ thống vượt qua rào cản về ranh giới từ vựng để giải quyết xuất sắc các hiện tượng từ đồng nghĩa (Synonymy) và đa nghĩa (Polysemy).
+* **Nhánh Truy xuất Thưa (Sparse/Lexical Retrieval) - Thuật toán BM25:**
+  * Triển khai hàm tính điểm Okapi BM25 nhằm giải quyết bài toán đối khớp từ vựng (Exact Match). 
+  * Thông qua việc tích hợp hệ số chuẩn hóa độ dài tài liệu (Document Length Normalization) và hàm tiệm cận bão hòa tần suất (Term Frequency Saturation), thuật toán kiểm soát hiệu quả hiện tượng nhiễu do lặp từ khóa. Nhánh này đặc biệt tối ưu trong việc trích xuất các danh từ riêng, định danh số học và thuật ngữ ngoại lai (Out-of-Vocabulary Terms).
+* **Nhánh Truy xuất Dày (Dense/Semantic Retrieval) - Mô hình Bi-Encoder:**
+  * Ứng dụng kiến trúc mã hóa kép (như `multilingual-e5`) để ánh xạ các truy vấn (Queries) và tài liệu (Passages) vào cùng một không gian nhúng liên tục (Continuous Embedding Space). 
+  * Độ tương đồng được đo lường thông qua khoảng cách Cosine, cho phép hệ thống đánh giá tính liên kết về mặt ngữ nghĩa tiềm ẩn (Latent Semantic Relatedness), từ đó xử lý triệt để các hiện tượng đồng nghĩa (Synonymy) và đa nghĩa (Polysemy).
 
-### 3. Hợp nhất Đối sánh (Rank Aggregation - RRF)
-Quá trình hợp nhất kết quả từ hai luồng (Sparse và Dense) đối mặt với thách thức lớn về sự bất đồng nhất trong phân phối điểm số (Score Distribution). Để giải quyết vấn đề này, hệ thống áp dụng thuật toán **Reciprocal Rank Fusion (RRF)**:
-* RRF loại bỏ hoàn toàn giá trị điểm số thô của các mô hình, chỉ sử dụng nghịch đảo thứ hạng (Rank) để tính toán trọng số hợp nhất.
-* Các tài liệu đạt thứ hạng cao ở cả hai luồng sẽ được khuếch đại thứ hạng chung. Thuật toán này đóng vai trò như một bộ lọc (Filter) ổn định, dung hòa đặc tính cốt lõi của cả hai phương pháp để tạo ra một tập hợp $K$ ứng viên (Top-K Candidates) toàn diện nhất.
+### 3. Dung hợp Điểm số (Rank Aggregation - RRF)
+Việc kết hợp kết quả từ hai không gian biểu diễn (Sparse và Dense) đặt ra thách thức về sự bất đồng nhất trong phân phối hàm điểm (Score Distribution). Hệ thống áp dụng thuật toán **Reciprocal Rank Fusion (RRF)** để giải quyết vấn đề này:
+* Thuật toán RRF loại bỏ sự phụ thuộc vào điểm số nguyên bản của từng mô hình, thay vào đó tính toán trọng số dung hợp dựa trên nghịch đảo thứ hạng (Reciprocal Rank).
+* Các tài liệu đạt thứ hạng cao ở cả hai nhánh truy xuất sẽ được gia tăng trọng số tích lũy. Cơ chế này hoạt động như một bộ lọc nhiễu (Noise Filter), đảm bảo tính ổn định và tính đa dạng cho tập ứng viên Top-$K$ (Top-K Candidates) được trích xuất.
 
-### 4. Xếp hạng lại Giai đoạn hai (Second-Stage Re-ranking - Cross-Encoder)
-Tập ứng viên tinh gọn từ bước RRF tiếp tục được đưa vào giai đoạn đánh giá chuyên sâu (Re-ranking) bằng kiến trúc **Cross-Encoder**:
-* Khác với Bi-Encoder (chỉ so sánh hai vector tĩnh), Cross-Encoder thực hiện việc nối chuỗi trực tiếp truy vấn và từng tài liệu ứng viên. 
-* Toàn bộ chuỗi nối này được xử lý qua mạng nơ-ron sâu (Transformer). Nhờ cơ chế tự chú ý (Self-Attention) toàn cục, mọi token trong truy vấn đều có khả năng tương tác trực tiếp với mọi token trong tài liệu (Token-level cross-attention) ở tất cả các tầng của mô hình. 
-* Cơ chế này giúp mô hình trích xuất được những tương quan ngữ cảnh phức tạp nhất, từ đó đưa ra một điểm số liên quan (Relevance Score) mang độ chính xác tuyệt đối. Việc giới hạn phân tích chỉ trên Top-K ứng viên (thay vì toàn bộ Corpus) tạo ra sự cân bằng hoàn hảo giữa độ chính xác (Precision) và chi phí tính toán (Computational Cost).
+### 4. Tái xếp hạng Giai đoạn hai (Second-Stage Re-ranking)
+Tập ứng viên từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá độ liên quan chuyên sâu bằng cấu trúc **Cross-Encoder**:
+* Khác biệt với cấu trúc Bi-Encoder (chỉ so sánh khoảng cách giữa hai vector độc lập), mô hình Cross-Encoder thực hiện nối ghép trực tiếp truy vấn và từng tài liệu ứng viên thành một chuỗi duy nhất trước khi đưa qua mạng nơ-ron sâu (Transformer).
+* Dựa trên cơ chế tự chú ý chéo (Cross-Attention) ở cấp độ token, mọi thành phần trong truy vấn đều có khả năng tương tác trực tiếp với các thành phần trong tài liệu qua nhiều tầng ẩn (Hidden Layers). Cấu trúc này cho phép mô hình nắm bắt các quan hệ ngữ cảnh phức tạp và cung cấp điểm số liên quan (Relevance Score) với độ chuẩn xác tối đa.
+* Việc giới hạn phạm vi suy luận (Inference) của Cross-Encoder chỉ trên tập Top-$K$ ứng viên giúp tối ưu hóa khối lượng tính toán, tạo ra sự cân bằng thiết yếu giữa chi phí phần cứng (Computational Complexity) và độ chuẩn xác (Precision).
 
 ---
-**Tóm tắt đầu ra:** Trải qua luồng xử lý nghiêm ngặt từ BM25/E5 (tối ưu Recall), trộn hạng RRF (tối ưu tính đa dạng) và Cross-Encoder (tối ưu Precision), hệ thống trích xuất và trả về danh sách các tài liệu liên quan nhất theo thứ tự điểm số giảm dần, sẵn sàng tích hợp vào các 파ipeline RAG hạ nguồn.
+**Tóm tắt Luồng Xử lý:** Trải qua quy trình đánh giá đa tầng — từ việc tối ưu Recall với kiến trúc truy xuất lai (BM25 & Bi-Encoder), đa dạng hóa ứng viên bằng RRF, đến việc cực đại hóa Precision bằng Cross-Encoder — hệ thống cung cấp danh sách các tài liệu có độ liên quan cao nhất, được chuẩn hóa cấu trúc để tích hợp trực tiếp vào các mô hình sinh văn bản (Generation Models) ở giai đoạn hạ nguồn (Downstream Tasks).
