@@ -1,6 +1,6 @@
 # Ý tưởng thực hiện
 
-**Tóm tắt Luồng Xử lý:** Trải qua quy trình đánh giá đa tầng — từ việc tối ưu Recall với kiến trúc truy xuất lai (BM25 & Bi-Encoder), đa dạng hóa ứng viên bằng RRF, đến việc cực đại hóa Precision bằng Cross-Encoder — hệ thống cung cấp danh sách các tài liệu có độ liên quan cao nhất, được chuẩn hóa cấu trúc để tích hợp trực tiếp vào các mô hình sinh văn bản (Generation Models) ở giai đoạn hạ nguồn (Downstream Tasks).
+**Tóm tắt ý tưởng:**: Tối ưu Recall với kiến trúc truy xuất lai (BM25 & Bi-Encoder), đa dạng hóa ứng viên bằng RRF, cực đại hóa Precision bằng Cross-Encoder 
 
 
 ## Luồng kiến trúc hệ thống
