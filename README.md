@@ -20,6 +20,47 @@ Ví dụ một câu hỏi và đoạn đúng của nó:
 Mỗi câu hỏi có **đúng một đoạn được tính là đúng**: đó là đoạn văn mà người đặt câu hỏi đã đọc khi viết câu hỏi. Hai đặc điểm của dữ liệu cần chú ý khi đọc đề:
 * Câu hỏi thường **diễn đạt khác** với đoạn văn. Trong ví dụ trên, câu hỏi viết "Miaoli" và hỏi "quốc gia nào", còn đoạn văn viết "Miêu Lật" và "Đài Loan".
 * Kho có chứa **các đoạn khác của cùng bài viết** với đoạn đúng. Những đoạn này có cùng chủ đề và cùng tên riêng với đoạn đúng, nhưng không được tính điểm.
+## Dữ liệu
+
+Nút **Tải dữ liệu** trả về tệp `input.zip`. Khi giải nén, tệp này tạo thư mục `public/` gồm các tệp dưới đây.
+
+### `corpus.csv`
+
+| Cột | Ý nghĩa |
+| :--- | :--- |
+| `pid` | Mã đoạn duy nhất (`P00001` ... `P20000`) |
+| `title` | Tiêu đề bài viết Wikipedia chứa đoạn |
+| `text` | Nội dung đoạn văn, viết trên một dòng |
+
+### `train.csv`, `dev.csv`
+
+| Cột | Ý nghĩa |
+| :--- | :--- |
+| `qid` | Mã câu hỏi duy nhất (`Q00001` ...) |
+| `question` | Câu hỏi tiếng Việt |
+| `pid` | Mã đoạn đúng trong `corpus.csv` |
+
+`dev.csv` có cùng định dạng với `train.csv` và dùng để tự đánh giá. Thí sinh được phép gộp dev vào train.
+
+### `test.csv`
+
+| Cột | Ý nghĩa |
+| :--- | :--- |
+| `qid` | Mã câu hỏi cần dự đoán |
+| `question` | Câu hỏi |
+
+### `sample_submission.csv`
+
+Tệp mẫu này đúng định dạng bài nộp: mọi câu hỏi đều trả về mười đoạn đầu tiên của kho. Tệp hợp lệ nhưng chỉ được khoảng 0 điểm.
+
+### `scorer.py`
+
+Trình chấm chạy trên máy của thí sinh và cho cùng kết quả với trình chấm của nền tảng. Ngoài MRR@10, trình chấm in thêm Recall@1 và Recall@10:
+
+```bash
+python3 scorer.py du_doan_dev.csv --gt dev.csv
+python3 scorer.py du_doan_dev.csv --gt dev.csv --per-query  # in hạng của đoạn đúng ở từng câu hỏi
+```
 ## Định dạng bài nộp
 
 Tệp CSV mã hoá UTF-8, có dòng tiêu đề, gồm đúng 1.508 dòng dữ liệu (mỗi `qid` của `test.csv` một dòng) với hai cột:
