@@ -35,8 +35,9 @@ QueryScore = 0                         (nếu đoạn đúng không nằm trong 
 LeaderboardScore = (1 / N) x Σ QueryScore
 ```
 
-### Cấu trúc thư mục dữ liệu
+### 1.4. Cấu trúc thư mục dữ liệu
 
+```text
 public/
 |-- corpus.csv               (20.000 đoạn: pid, title, text)
 |-- train.csv                (3.995 cặp câu hỏi và đoạn đúng)
@@ -45,6 +46,7 @@ public/
 |-- sample_submission.csv
 |-- scorer.py                (trình chấm chạy tại chỗ)
 `-- README.md
+```
 
 # Ý tưởng thực hiện
 
