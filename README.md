@@ -1,3 +1,44 @@
+## 🎯 Tổng quan Bài toán (Problem Statement)
+
+### Tổng quan
+Cho một **kho 20.000 đoạn văn** lấy từ Wikipedia tiếng Việt và một **câu hỏi**, hệ thống phải tìm ra đoạn văn chứa câu trả lời[cite: 22]. Đây là bước truy xuất (retrieval) của một hệ thống hỏi đáp: thí sinh không cần trích câu trả lời, chỉ cần xếp đúng đoạn văn lên đầu danh sách[cite: 22].
+
+Dữ liệu của bài gồm[cite: 22]:
+* `corpus.csv`: 20.000 đoạn văn; mỗi đoạn có tiêu đề bài viết và nội dung, dài trung bình khoảng 100 âm tiết[cite: 22].
+* 3.995 cặp (câu hỏi, đoạn đúng) để train và 503 cặp để dev[cite: 22].
+* 1.508 câu hỏi test cần tìm đoạn; đoạn đúng của các câu hỏi test được ẩn[cite: 22].
+* Câu hỏi của train, dev và test lấy từ **các bài viết khác nhau**[cite: 22].
+
+Với mỗi câu hỏi test, thí sinh nộp **10 đoạn** xếp theo thứ tự từ khả năng đúng cao nhất đến thấp nhất[cite: 22]. Đoạn đúng nằm ở hạng càng cao thì điểm càng cao[cite: 22].
+
+### Nhiệm vụ
+Ví dụ một câu hỏi và đoạn đúng của nó[cite: 22]:
+> **Câu hỏi:** Thành phố Miaoli nằm ở quốc gia nào?[cite: 22]
+>
+> **Đoạn đúng** (`title` = "Miêu Lật (thành phố)"): Thành phố Miêu Lật (tiếng Trung: 苗栗市, Bính âm: Miáolì Shì...) là huyện lỵ của Huyện Miêu Lật, Đài Loan. Từ Miêu Lật là kết hợp của hai từ trong tiếng Khách Gia...[cite: 22]
+
+Mỗi câu hỏi có **đúng một đoạn được tính là đúng**: đó là đoạn văn mà người đặt câu hỏi đã đọc khi viết câu hỏi[cite: 22]. Hai đặc điểm của dữ liệu cần chú ý khi đọc đề[cite: 22]:
+* Câu hỏi thường **diễn đạt khác** với đoạn văn[cite: 22]. Trong ví dụ trên, câu hỏi viết "Miaoli" và hỏi "quốc gia nào", còn đoạn văn viết "Miêu Lật" và "Đài Loan"[cite: 22].
+* Kho có chứa **các đoạn khác của cùng bài viết** với đoạn đúng[cite: 22]. Những đoạn này có cùng chủ đề và cùng tên riêng với đoạn đúng, nhưng không được tính điểm[cite: 22].
+
+### Phương pháp đánh giá
+
+**Điểm của một câu hỏi**
+Điểm của một câu hỏi là **nghịch đảo thứ hạng** của đoạn đúng trong 10 đoạn đã nộp:
+```text
+QueryScore = 1 / hạng của đoạn đúng    (nếu đoạn đúng nằm ở hạng 1 đến 10)
+QueryScore = 0                         (nếu đoạn đúng không nằm trong 10 đoạn)
+```
+
+public/
+|-- corpus.csv               (20.000 đoạn: pid, title, text)
+|-- train.csv                (3.995 cặp câu hỏi và đoạn đúng)
+|-- dev.csv                  (503 cặp)
+|-- test.csv                 (1.508 câu hỏi)
+|-- sample_submission.csv
+|-- scorer.py                (trình chấm chạy tại chỗ)
+`-- README.md
+
 # Ý tưởng thực hiện
 
 **Tóm tắt ý tưởng:** Tối ưu Recall với kiến trúc truy xuất lai (BM25 & Bi-Encoder), tích hợp kết quả bằng RRF, cực đại hóa Precision bằng Cross-Encoder 
