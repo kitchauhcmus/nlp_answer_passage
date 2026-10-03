@@ -30,6 +30,7 @@ QueryScore = 1 / hạng của đoạn đúng    (nếu đoạn đúng nằm ở 
 QueryScore = 0                         (nếu đoạn đúng không nằm trong 10 đoạn)
 ```
 ### Cấu trúc thư mục dữ liệu
+
 public/
 |-- corpus.csv               (20.000 đoạn: pid, title, text)
 |-- train.csv                (3.995 cặp câu hỏi và đoạn đúng)
