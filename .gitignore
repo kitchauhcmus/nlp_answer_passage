@@ -1,0 +1,11 @@
+# Bỏ qua dữ liệu thô và kết quả dự đoán
+*.csv
+*.xlsx
+data/
+submissions/
+
+# Bỏ qua môi trường Python và cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
