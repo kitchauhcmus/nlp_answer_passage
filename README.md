@@ -21,9 +21,9 @@ Nhằm khắc phục những giới hạn của các phương pháp truy xuất 
 ### 3. Dung hợp điểm số và lọc Ứng viên (RRF)
 Hệ thống triển khai thuật toán **Reciprocal Rank Fusion (RRF)** trên tập ứng viên sơ cấp:
 
-* **Trích xuất và Hợp nhất Cục bộ:** Đối với mỗi truy vấn, hệ thống tiến hành truy xuất độc lập Top 50 tài liệu dẫn đầu từ nhánh BM25 và Top 50 tài liệu từ nhánh Dense Model. Thuật toán RRF sau đó được kích hoạt để dung hợp hai danh sách rời rạc này thành một không gian ứng viên thống nhất.
-* **Định lượng qua Nghịch đảo Thứ hạng:** Thay vì sử dụng điểm số nguyên bản vốn không cùng hệ quy chiếu, RRF tính toán điểm số mới cho mỗi tài liệu dựa trên nghịch đảo vị trí xếp hạng (Reciprocal Rank) của nó trong từng danh sách. Cơ chế này giúp triệt tiêu hoàn toàn sự chênh lệch về thang điểm (Scale Bias) giữa các mô hình.
-* **Khuếch đại Tín hiệu Đồng thuận (Consensus Amplification):** Những tài liệu xuất hiện ở thứ hạng cao trong cả hai danh sách Top 50 sẽ được cộng dồn trọng số và đẩy lên vị trí dẫn đầu. Kết thúc quá trình dung hợp, thuật toán gạn lọc và giữ lại đúng 50 ứng viên (Top-50 Candidates) ưu tú nhất. Tập ứng viên này mang tính đa dạng cao — bao hàm cả đặc tính đối khớp từ vựng lẫn ngữ nghĩa — sẵn sàng chuyển giao cho giai đoạn tái xếp hạng chuyên sâu.
+* **Trích xuất và hợp nhất:** Đối với mỗi truy vấn, hệ thống tiến hành truy xuất độc lập Top 50 tài liệu dẫn đầu từ nhánh BM25 và Top 50 tài liệu từ nhánh Dense Model. Thuật toán RRF sau đó được kích hoạt để dung hợp hai danh sách rời rạc này thành một không gian ứng viên thống nhất.
+* **Định lượng qua nghịch đảo thứ hạng:** Thay vì sử dụng điểm số nguyên bản vốn không cùng hệ quy chiếu, RRF tính toán điểm số mới cho mỗi tài liệu dựa trên nghịch đảo vị trí xếp hạng của nó trong từng danh sách. Cơ chế này giúp triệt tiêu hoàn toàn sự chênh lệch về thang điểm giữa các mô hình.
+* **Cộng thứ hạng:** Những tài liệu xuất hiện ở thứ hạng cao trong cả hai danh sách Top 50 sẽ được cộng dồn trọng số và đẩy lên vị trí dẫn đầu. Kết thúc quá trình dung hợp, thuật toán lọc và giữ lại đúng 50 ứng viên tốt nhất. 
 
 ### 4. Tái xếp hạng Giai đoạn hai (Second-Stage Re-ranking)
 Tập ứng viên từ bước dung hợp tiếp tục được đưa vào giai đoạn đánh giá độ liên quan chuyên sâu bằng cấu trúc **Cross-Encoder**:
