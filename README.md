@@ -31,7 +31,9 @@ QueryScore = 0                         (nếu đoạn đúng không nằm trong 
 ```
 **Điểm của bài nộp**
 Điểm của bài nộp là trung bình QueryScore trên mọi câu hỏi của tập test, tức MRR@10:
+```text
 LeaderboardScore = (1 / N) x Σ QueryScore
+```
 
 ### Cấu trúc thư mục dữ liệu
 
