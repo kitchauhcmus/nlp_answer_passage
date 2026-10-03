@@ -6,11 +6,11 @@
 Dữ liệu văn bản thô thường tồn tại nhiễu và phân mảnh thông tin. Giai đoạn tiền xử lý tiến hành chuẩn hóa và tích hợp không gian ngữ cảnh:
 * **Tích hợp Tiêu đề - Nội dung (Title-Text Concatenation):** Tiêu đề tài liệu thường bao hàm các thông tin cô đọng và có giá trị phân loại cao. Việc hợp nhất tiêu đề vào nội dung văn bản giúp gia tăng mật độ đặc trưng và làm phong phú không gian biểu diễn, qua đó nâng cao chất lượng đầu vào cho các mô hình mã hóa ở giai đoạn sau.
 
-### 2. Truy xuất bằng BM25 & Dense
+### 2. Truy xuất Giai đoạn một (First-Stage Retrieval: BM25 & Dense)
 Nhằm khắc phục những giới hạn của các phương pháp truy xuất đơn lẻ, hệ thống vận hành song song hai nhánh trích xuất độc lập nhằm cực đại hóa độ phủ (Recall) trên toàn bộ tập dữ liệu (Corpus):
 
-* BM25 (Kế thừa TF-IDF): Thuật toán này hoạt động dựa trên cơ chế so khớp từ khóa chính xác (Lexical Matching). Nó cực kỳ mạnh khi bạn cần tìm kiếm các mã số đặc thù, tên riêng hiếm gặp, hoặc các thuật ngữ chuyên ngành không thể thay thế. Tuy nhiên, nó sẽ "mù tịt" nếu câu hỏi và tài liệu dùng từ đồng nghĩa (ví dụ: hỏi "xe cộ" nhưng tài liệu ghi "phương tiện giao thông").
-* Dense Model (`multilingual-e5-base`): Việc mã hóa văn bản thành không gian vector (Embeddings) giúp mô hình này hiểu được ngữ cảnh và so khớp ngữ nghĩa (Semantic Matching). Nó giải quyết hoàn hảo điểm yếu từ đồng nghĩa của BM25. Dù vậy, nó không "tốt hơn" một cách tuyệt đối. Các mô hình vector thường kém nhạy bén với những từ khóa chính xác rải rác hoặc các mã ID cụ thể.
+* **Nhánh Truy xuất Thưa (Sparse/Lexical Retrieval) - BM25:** Kế thừa và tối ưu hóa từ TF-IDF, thuật toán hoạt động dựa trên cơ chế đối khớp từ vựng chính xác (Lexical Matching). Phương pháp này thể hiện hiệu năng vượt trội khi truy xuất các thực thể định danh, mã số đặc thù hoặc thuật ngữ chuyên ngành hiếm gặp (Out-of-Vocabulary terms). Tuy nhiên, giới hạn của BM25 là sự suy giảm hiệu suất nghiêm trọng khi truy vấn và tài liệu sử dụng từ đồng nghĩa nhưng không trùng khớp về mặt ký tự định dạng.
+* **Nhánh Truy xuất Dày (Dense/Semantic Retrieval) - Bi-Encoder (`multilingual-e5-base`):** Bằng cách ánh xạ văn bản vào không gian vector đa chiều (Embeddings), mô hình thực hiện đánh giá độ tương đồng dựa trên ngữ cảnh (Semantic Matching). Đặc tính này giúp hệ thống khắc phục triệt để điểm yếu của BM25 trong việc xử lý hiện tượng từ đồng nghĩa (Synonymy) và đa nghĩa (Polysemy). Mặc dù vậy, do cấu trúc biểu diễn vector thường kém nhạy bén với các định danh ID hoặc từ khóa rời rạc, việc kết hợp Dense Model và BM25 tạo ra một cơ chế bù trừ hoàn hảo, đảm bảo không bỏ sót bất kỳ thông tin trọng yếu nào.
 
 
 ### 3. Dung hợp Điểm số (Rank Aggregation - RRF)
